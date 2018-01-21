@@ -1,0 +1,5 @@
+Установка библиотеки для разаработчика.
+sudo apt-get default-install libmysqlclient-dev
+
+Строка для компилирования
+gcc main.c -o mysql `mysql_config --cflags --libs`
