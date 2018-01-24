@@ -7,7 +7,7 @@ int main(int argc, char **argv){
 	printf("MySQL client version: %s\n", mysql_get_client_info());
 
 	if (mysql_real_connect(con, "localhost", "root", "23272829", NULL, 0, NULL, 0) == NULL) {
-		printf(stderr, "%s\n", mysql_error(con));
+		printf("%s\n", mysql_error(con));
 	        mysql_close(con);
 	        exit(1); 
 	}
