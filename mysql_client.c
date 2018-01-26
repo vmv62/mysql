@@ -40,6 +40,8 @@ int add_to_db(float *dat){
         TDATA *table;
 
         table = (TDATA *)malloc(sizeof(table));
+                        
+        table->name = "Counter";
         add_to_table(table);
 
         mysql_close(con);
@@ -49,4 +51,5 @@ int add_to_db(float *dat){
 int add_to_table(TDATA *table){
 //      amysql_query(con, "INSERT INTO counter(Voltage, Ampers) VALUES(230.5, 1.89)");
         printf("Add function\n");
+        printf("%s\n", table->name);
 }
