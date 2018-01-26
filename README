@@ -11,3 +11,5 @@ gcc main.c -o mysql `mysql_config --cflags --libs`
 3. Проверка наличия поределенной таблицы.
   3.1 При ее отсутствии создать с требуемыми полями.
 4. Внесение данных в таблицу.
+clear && gcc mysql_cli.c -o mysql -I/usr/include/mysql 
+-L/usr/lib/i386-linux-gnu  -lmariadbclient -lpthread -lz -lm -ldl

@@ -43,17 +43,17 @@ int add_to_db(float *dat){
 
 //	TDATA *table;
 //	table = (TDATA *)malloc(sizeof(table));
-	strcpy(db->table_dat_t.name, "I am table name");
-	add_to_table(&db->table);
+//	strcpy(db->table->name, "I am table name");
+	db->table->name = "I am table name";
+	add_to_table(db->table);
 
 	mysql_close(con);
 	return 0;
 }
 
 
-int add_to_table(struct table_dat table){
-//	amysql_query(con, "INSERT INTO counter(Voltage, Ampers) VALUES(230.5, 1.89)");
+int add_to_table(struct table_dat_t *table){
 	printf("Add function\n");
-	printf("Struct field: %s\n", table.name);
+	printf("Struct field: %s\n", table->name);
 }
 
