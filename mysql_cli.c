@@ -2,6 +2,7 @@
 #include <my_global.h>
 #include <mysql.h>
 #include "mysql_cli.h"
+#include <string.h>
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
@@ -10,6 +11,10 @@ int main(int argc, char **argv){
 
 int add_to_db(float *dat){
 	MYSQL *con = mysql_init(NULL);
+	DBDAT *db;
+
+	db = (DBDAT *)malloc(sizeof(db));
+
 
 	if (mysql_real_connect(con, "localhost", "root", "23272829", NULL, 0, NULL, 0) == NULL) {
 		printf("%s\n", mysql_error(con));
@@ -36,18 +41,19 @@ int add_to_db(float *dat){
 		printf("%s\n", mysql_error(con));
 	}
 
-	TDATA *table;
-
-	table = (TDATA *)malloc(sizeof(table));
-	add_to_table(table);
+//	TDATA *table;
+//	table = (TDATA *)malloc(sizeof(table));
+	strcpy(db->table_dat_t.name, "I am table name");
+	add_to_table(&db->table);
 
 	mysql_close(con);
 	return 0;
 }
 
 
-int add_to_table(TDATA *table){
+int add_to_table(struct table_dat table){
 //	amysql_query(con, "INSERT INTO counter(Voltage, Ampers) VALUES(230.5, 1.89)");
 	printf("Add function\n");
+	printf("Struct field: %s\n", table.name);
 }
 
