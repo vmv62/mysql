@@ -1,3 +1,7 @@
+static char *use_db = "USE %s";
+static char *create_table = "CREATE TABLE %s (%s)";
+static char *create_db = "CREATE DATABASE %s";
+static char *insert_to_table = "INSERT ";
 
 //Определили новый тип struct colomn_param и присвоели ему псевдоним colomn
 typedef struct colomn_param{
