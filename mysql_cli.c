@@ -10,26 +10,25 @@ int main(int argc, char **argv){
 	DBDAT *db_p;
 	db_p = (DBDAT *)malloc(sizeof(DBDAT));
 
-	printf("%s\n", argv[0]);
-	printf("%s\n", argv[1]);
-	printf("%s\n", argv[2]);
 
-
+	if(argc < 4){
+		puts("Usage: command 'db_name' 'table_name' 'colomn_name' 'colomn_type'");
+	}
 
 	strcpy(db_p->user, "root");
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
-	strcpy(db_p->name, "sensors");
-	strcpy(db_p->table, "linux");
+	strcpy(db_p->name, argv[1]);
+	strcpy(db_p->table, argv[2]);
 	db_p->tc_num = 2;
 
 	//Заполняем наименования колонок таблицы и их тип.
-	strcpy(db_p->col[0].name, "Command"); // "CHAR(20)"};
-	strcpy(db_p->col[0].type, "Tinytext");
+	strcpy(db_p->col[0].name, argv[3]); // "CHAR(20)"};
+	strcpy(db_p->col[0].type, argv[4]);
 
 
-	strcpy(db_p->col[1].name, "Note"); // "CHAR(20)"};
-	strcpy(db_p->col[1].type, "Text");
+//	strcpy(db_p->col[1].name, "Note"); // "CHAR(20)"};
+//	strcpy(db_p->col[1].type, "Text");
 
 	add_to_db(db_p);
 }
