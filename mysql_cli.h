@@ -12,6 +12,7 @@ typedef struct {
 	char name[20];
 	char server[20];
 	char table[20];
+	int tc_num;
 	colomn col[20];
 }DBDAT;
 

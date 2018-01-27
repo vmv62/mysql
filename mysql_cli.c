@@ -15,40 +15,57 @@ int main(int argc, char **argv){
 	strcpy(db_p->server, "localhost");
 	strcpy(db_p->name, "sensors");
 	strcpy(db_p->table, "Counter");
+	db_p->tc_num = 2;
 
 	//Заполняем наименования колонок таблицы и их тип.
 	strcpy(db_p->col[0].name, "Voltage"); // "CHAR(20)"};
 	strcpy(db_p->col[0].type, "CHAR(20)");
 
-//	db_p->col[0].name = "Voltage";
-//	db_p->col[0].type = "CHAR(20)";
+
+	strcpy(db_p->col[1].name, "Ampers"); // "CHAR(20)"};
+	strcpy(db_p->col[1].type, "INT");
 
 	add_to_db(db_p);
 }
 
 int add_to_db(DBDAT *db){
 	MYSQL *con = mysql_init(NULL);
+	char buffer[1000];
 
-	printf("%s\n", db->col[0].name);
-	printf("%s\n", db->col[0].type);
-
-
+	//Подключаемся к базе (сервер, пользователь, пароль)
 	if (mysql_real_connect(con, db->server, db->user, db->passwd, NULL, 0, NULL, 0) == NULL) {
-		printf("%s\n", mysql_error(con));
+		printf("%s\n", mysql_error(con)); 
+		return -1;
 	}
 
-	if (mysql_query(con, "CREATE DATABASE sensors")) {
-	        printf("%s\n", mysql_error(con));
-	  }
+	char *create_db = "CREATE DATABASE %s";
+	char *select_db = "USE %s";
+
+	sprintf(buffer, select_db, db->name);
+
+	//Работа с базой.
+	
+	//Если база выбрана неудачно:
+	if(mysql_select_db(con, db->name)){
+		//создаем базу, если неудачно, то выходим.
+		if(mysql_query(con, buffer)){
+			return -1;
+		}
+	}
 
 
-	if (mysql_select_db(con, "sensors")) {
-	        printf("%s\n", mysql_error(con));
-	  }
+	//Работа с таблицей
 
-	if (mysql_query(con, "CREATE TABLE Counter(Id INT, Voltage DECIMAL(5,2), Ampers DECIMAL(5,2), Activ_Pow DECIMAL(5,2), App_Pow DECIMAL(5,2), Rect_Pow DECIMAL(5,2), Pow_Fact DECIMAL(5,2), Freq DECIMAL(5,2), Imp_Act_En DECIMAL(5,2), Exp_Act_en DECIMAL(5,2), Imp_React_En DECIMAL(5,2), Exp_React_En DECIMAL(5,2), Tot_Act_En DECIMAL(5,2), Tot_React_En DECIMAL(5,2));")) {
-      		printf("%s\n", mysql_error(con));
-        }
+	char *create_table = "CREATE TABLE %s (%s)";
+	char *param_pair = "%s %s%s";
+	char tmp[200];
+
+	for(int i=0; i < db->tc_num; i++){
+		sprintf(tmp, param_pair, db->col[i].name, db->col[i].type, ", ");
+		printf("%s", tmp);
+		strcat(buffer, tmp);
+	}
+
 
 	char tmp_str[2000];
 	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
@@ -57,6 +74,8 @@ int add_to_db(DBDAT *db){
 	if(mysql_query(con, tmp_str)){
 		printf("%s\n", mysql_error(con));
 	}
+
+
 
 	mysql_close(con);
 	return 0;
