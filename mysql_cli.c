@@ -6,17 +6,22 @@
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
-	add_to_db(mmm);
+	
+	DBDAT *db_p;
+	db_p = (DBDAT *)malloc(sizeof(DBDAT));
+
+	strcpy(db_p->user, "root");
+	strcpy(db_p->passwd, "23272829");
+	strcpy(db_p->server, "localhost");
+	strcpy(db_p->name, "sensors");
+	add_to_db(db_p);
 }
 
-int add_to_db(float *dat){
+int add_to_db(DBDAT *db){
 	MYSQL *con = mysql_init(NULL);
-	DBDAT *db;
-
-	db = (DBDAT *)malloc(sizeof(db));
 
 
-	if (mysql_real_connect(con, "localhost", "root", "23272829", NULL, 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(con, db->server, db->user, db->passwd, NULL, 0, NULL, 0) == NULL) {
 		printf("%s\n", mysql_error(con));
 	}
 
@@ -34,18 +39,12 @@ int add_to_db(float *dat){
         }
 
 	char tmp_str[2000];
-	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", dat[0], dat[1]);
+	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
 	printf("%s\n", tmp_str);
 
 	if(mysql_query(con, tmp_str)){
 		printf("%s\n", mysql_error(con));
 	}
-
-//	TDATA *table;
-//	table = (TDATA *)malloc(sizeof(table));
-//	strcpy(db->table->name, "I am table name");
-	db->table->name = "I am table name";
-	add_to_table(db->table);
 
 	mysql_close(con);
 	return 0;
