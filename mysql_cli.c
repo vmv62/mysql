@@ -15,6 +15,7 @@ int main(int argc, char **argv){
 	printf("%s\n", argv[2]);
 
 
+
 	strcpy(db_p->user, "root");
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
