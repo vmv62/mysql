@@ -14,11 +14,19 @@ int main(int argc, char **argv){
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
 	strcpy(db_p->name, "sensors");
+
+	//Заполняем гаименования колонок таблицы и их тип.
+	strcpy(db_p->col[0].name, "Voltage"); // "CHAR(20)"};
+	strcpy(db_p->col[0].type, "CHAR(20)"); // "CHAR(20)"};
+
 	add_to_db(db_p);
 }
 
 int add_to_db(DBDAT *db){
 	MYSQL *con = mysql_init(NULL);
+
+	printf("%s\n", db->col[0].name);
+	printf("%s\n", db->col[0].type);
 
 
 	if (mysql_real_connect(con, db->server, db->user, db->passwd, NULL, 0, NULL, 0) == NULL) {
@@ -50,9 +58,9 @@ int add_to_db(DBDAT *db){
 	return 0;
 }
 
-
+/*
 int add_to_table(struct table_dat_t *table){
 	printf("Add function\n");
 	printf("Struct field: %s\n", table->name);
 }
-
+*/
