@@ -56,17 +56,18 @@ int add_to_db(DBDAT *db){
 
 	//Работа с таблицей
 
+	memset(buffer, 0, sizeof(buffer));
 	char *create_table = "CREATE TABLE %s (%s)";
 	char *param_pair = "%s %s%s";
 	char tmp[200];
 
 	for(int i=0; i < db->tc_num; i++){
 		sprintf(tmp, param_pair, db->col[i].name, db->col[i].type, ", ");
-		printf("%s", tmp);
-		strcat(buffer, tmp);
+		strncat(buffer, tmp, strlen(tmp));
 	}
 
-
+	printf("%s\n", buffer);
+	
 	char tmp_str[2000];
 	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
 	printf("%s\n", tmp_str);
