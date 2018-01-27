@@ -14,16 +14,16 @@ int main(int argc, char **argv){
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
 	strcpy(db_p->name, "sensors");
-	strcpy(db_p->table, "Counter");
+	strcpy(db_p->table, "linux");
 	db_p->tc_num = 2;
 
 	//Заполняем наименования колонок таблицы и их тип.
-	strcpy(db_p->col[0].name, "Voltage"); // "CHAR(20)"};
-	strcpy(db_p->col[0].type, "CHAR(20)");
+	strcpy(db_p->col[0].name, "Command"); // "CHAR(20)"};
+	strcpy(db_p->col[0].type, "Tinytext");
 
 
-	strcpy(db_p->col[1].name, "Ampers"); // "CHAR(20)"};
-	strcpy(db_p->col[1].type, "INT");
+	strcpy(db_p->col[1].name, "Note"); // "CHAR(20)"};
+	strcpy(db_p->col[1].type, "Text");
 
 	add_to_db(db_p);
 }
@@ -56,27 +56,39 @@ int add_to_db(DBDAT *db){
 
 	//Работа с таблицей
 
-	memset(buffer, 0, sizeof(buffer));
+
 	char *create_table = "CREATE TABLE %s (%s)";
-	char *param_pair = "%s %s%s";
 	char tmp[200];
 
+	memset(buffer, 0, sizeof(buffer));
+
+
 	for(int i=0; i < db->tc_num; i++){
-		sprintf(tmp, param_pair, db->col[i].name, db->col[i].type, ", ");
+		sprintf(tmp, "%s %s", db->col[i].name, db->col[i].type);
 		strncat(buffer, tmp, strlen(tmp));
+		if(i < (db->tc_num - 1)){
+			strncat(buffer, ", ", strlen(", "));
+		}
 	}
 
-	printf("%s\n", buffer);
-	
-	char tmp_str[2000];
-	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
-	printf("%s\n", tmp_str);
+	char query_string[2000];
 
-	if(mysql_query(con, tmp_str)){
+	sprintf(query_string, create_table, db->table, buffer);
+	printf("%s\n", query_string);
+
+	if(mysql_query(con, query_string)){
 		printf("%s\n", mysql_error(con));
 	}
 
 
+//	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
+//	printf("%s\n", tmp_str);
+/*
+	if(mysql_query(con, query_string)){
+		printf("%s\n", mysql_error(con));
+	}
+
+*/
 
 	mysql_close(con);
 	return 0;
