@@ -10,6 +10,11 @@ int main(int argc, char **argv){
 	DBDAT *db_p;
 	db_p = (DBDAT *)malloc(sizeof(DBDAT));
 
+	printf("%s\n", argv[0]);
+	printf("%s\n", argv[1]);
+	printf("%s\n", argv[2]);
+
+
 	strcpy(db_p->user, "root");
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
