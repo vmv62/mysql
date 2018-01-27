@@ -11,6 +11,7 @@ typedef struct {
 	char passwd[20];
 	char name[20];
 	char server[20];
+	char table[20];
 	colomn col[20];
 }DBDAT;
 

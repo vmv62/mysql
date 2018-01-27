@@ -14,10 +14,14 @@ int main(int argc, char **argv){
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
 	strcpy(db_p->name, "sensors");
+	strcpy(db_p->table, "Counter");
 
-	//Заполняем гаименования колонок таблицы и их тип.
+	//Заполняем наименования колонок таблицы и их тип.
 	strcpy(db_p->col[0].name, "Voltage"); // "CHAR(20)"};
-	strcpy(db_p->col[0].type, "CHAR(20)"); // "CHAR(20)"};
+	strcpy(db_p->col[0].type, "CHAR(20)");
+
+//	db_p->col[0].name = "Voltage";
+//	db_p->col[0].type = "CHAR(20)";
 
 	add_to_db(db_p);
 }
