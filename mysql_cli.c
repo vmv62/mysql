@@ -86,6 +86,8 @@ int add_to_db(DBDAT *db){
 	}
 
 
+
+
 //	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
 //	printf("%s\n", tmp_str);
 /*
