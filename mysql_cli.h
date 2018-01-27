@@ -1,9 +1,11 @@
+
+//Определили новый тип struct colomn_param и присвоели ему псевдоним colomn
 typedef struct colomn_param{
 	char name[20];
 	char type[20];
 }colomn;
 
-//Параметры для подключения к базе данных
+//Параметры для подключения к базе данных ввиде нового типа DBDAT
 typedef struct {
 	char user[20];
 	char passwd[20];
