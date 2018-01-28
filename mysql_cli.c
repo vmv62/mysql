@@ -6,29 +6,26 @@
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
-	
+
 	DBDAT *db_p;
 	db_p = (DBDAT *)malloc(sizeof(DBDAT));
-
-
-	if(argc < 4){
-		puts("Usage: command 'db_name' 'table_name' 'colomn_name' 'colomn_type'");
-	}
 
 	strcpy(db_p->user, "root");
 	strcpy(db_p->passwd, "23272829");
 	strcpy(db_p->server, "localhost");
-	strcpy(db_p->name, argv[1]);
-	strcpy(db_p->table, argv[2]);
+	strcpy(db_p->name, "linux");
+	strcpy(db_p->table, "commands");
 	db_p->tc_num = 2;
 
 	//Заполняем наименования колонок таблицы и их тип.
-	strcpy(db_p->col[0].name, argv[3]); // "CHAR(20)"};
-	strcpy(db_p->col[0].type, argv[4]);
+	strcpy(db_p->col[0].name, "Command");
+	strcpy(db_p->col[0].type, "Tinytext");
+	strcpy(db_p->col[0].data, "\"ls -lsa\"");
 
+	strcpy(db_p->col[1].name, "Note");
+	strcpy(db_p->col[1].type, "Text");
+	strcpy(db_p->col[1].data, "\"Command that print list of files and folders\"");
 
-//	strcpy(db_p->col[1].name, "Note"); // "CHAR(20)"};
-//	strcpy(db_p->col[1].type, "Text");
 
 	add_to_db(db_p);
 }
@@ -40,18 +37,17 @@ int add_to_db(DBDAT *db){
 	//Подключаемся к базе (сервер, пользователь, пароль)
 	if (mysql_real_connect(con, db->server, db->user, db->passwd, NULL, 0, NULL, 0) == NULL) {
 		printf("%s\n", mysql_error(con)); 
-		return -1;
+				return -1;
 	}
 
-	char *create_db = "CREATE DATABASE %s";
-	char *select_db = "USE %s";
-
-	sprintf(buffer, select_db, db->name);
+	sprintf(buffer, create_db, db->name);
+	printf("%s\n", buffer);
 
 	//Работа с базой.
 	
 	//Если база выбрана неудачно:
 	if(mysql_select_db(con, db->name)){
+		puts("No database, i am create it now!\n");
 		//создаем базу, если неудачно, то выходим.
 		if(mysql_query(con, buffer)){
 			return -1;
@@ -61,13 +57,13 @@ int add_to_db(DBDAT *db){
 
 	//Работа с таблицей
 
-
-	char *create_table = "CREATE TABLE %s (%s)";
-	char tmp[200];
+	char tmp[2000];
+	char tmp1[2000];
+	char tmp2[2000];
 
 	memset(buffer, 0, sizeof(buffer));
 
-
+	//Для создания таблицы формируем пару: название столбца, тип данных
 	for(int i=0; i < db->tc_num; i++){
 		sprintf(tmp, "%s %s", db->col[i].name, db->col[i].type);
 		strncat(buffer, tmp, strlen(tmp));
@@ -75,35 +71,50 @@ int add_to_db(DBDAT *db){
 			strncat(buffer, ", ", strlen(", "));
 		}
 	}
-
 	char query_string[2000];
-
+	//Формируем строку запроса.
 	sprintf(query_string, create_table, db->table, buffer);
 	printf("%s\n", query_string);
-
+	//Обработка ошибки при запросе
 	if(mysql_query(con, query_string)){
 		printf("%s\n", mysql_error(con));
 	}
 
 
+	//Внесение данных в таблицу
+	memset(buffer, 0, sizeof(buffer));
+	memset(tmp, 0, sizeof(tmp));
+	memset(tmp1, 0, sizeof(tmp1));
+	memset(tmp2, 0, sizeof(tmp2));
 
+	for(int i=0; i < db->tc_num; i++){
+		sprintf(tmp, "%s", db->col[i].name);
+//		printf("%s\n", tmp);
+		strncat(tmp1, tmp, strlen(tmp));
+		if(i < (db->tc_num - 1)){
+			strncat(tmp1, ", ", strlen(", "));
+		}
+	}
 
-//	sprintf(tmp_str, "INSERT INTO Counter(Voltage, Ampers) VALUES(%.2f, %.2f)", 23.78, 612.3);
-//	printf("%s\n", tmp_str);
-/*
-	if(mysql_query(con, query_string)){
+	memset(tmp, 0, sizeof(tmp));
+	for(int i=0; i < db->tc_num; i++){
+		sprintf(tmp, "%s", db->col[i].data);
+		strncat(tmp2, tmp, strlen(tmp));
+		if(i < (db->tc_num - 1)){
+			strncat(tmp2, ", ", strlen(", "));
+		}
+	}
+
+	sprintf(buffer, insert_to_table, db->table, tmp1, tmp2);
+	printf("%s\n", buffer);
+
+	if(mysql_query(con, buffer)){
 		printf("%s\n", mysql_error(con));
 	}
 
-*/
+
 
 	mysql_close(con);
 	return 0;
 }
 
-/*
-int add_to_table(struct table_dat_t *table){
-	printf("Add function\n");
-	printf("Struct field: %s\n", table->name);
-}
-*/
