@@ -1,5 +1,5 @@
 static char *use_db = "USE %s";
-static char *create_table = "CREATE TABLE %s (%s)";
+static char *create_table = "CREATE TABLE %s (Time TIMESTAMP, %s)";
 static char *create_db = "CREATE DATABASE %s";
 static char *insert_to_table = "INSERT INTO %s(%s) VALUES(%s)";
 

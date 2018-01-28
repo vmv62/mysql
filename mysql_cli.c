@@ -3,7 +3,7 @@
 #include <mysql.h>
 #include "mysql_cli.h"
 #include <string.h>
-
+/*
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv){
 
 	add_to_db(db_p);
 }
-
+*/
 int add_to_db(DBDAT *db){
 	MYSQL *con = mysql_init(NULL);
 	char buffer[1000];
