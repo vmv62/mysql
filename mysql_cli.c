@@ -36,19 +36,18 @@ int add_to_db(DBDAT *db){
 
 	//Подключаемся к базе (сервер, пользователь, пароль)
 	if (mysql_real_connect(con, db->server, db->user, db->passwd, NULL, 0, NULL, 0) == NULL) {
-		printf("%s\n", mysql_error(con)); 
+//		printf("%s\n", mysql_error(con)); 
 				return -1;
 	}
 
 	sprintf(buffer, create_db, db->name);
-	printf("%s\n", buffer);
+//	printf("%s\n", buffer);
 
 	//Работа с базой.
 	
 	//Если база выбрана неудачно:
 	if(mysql_select_db(con, db->name)){
-		puts("No database, i am create it now!\n");
-		//создаем базу, если неудачно, то выходим.
+//		puts("No database, i am create it now!\n");
 		if(mysql_query(con, buffer)){
 			return -1;
 		}
@@ -74,10 +73,9 @@ int add_to_db(DBDAT *db){
 	char query_string[2000];
 	//Формируем строку запроса.
 	sprintf(query_string, create_table, db->table, buffer);
-	printf("%s\n", query_string);
 	//Обработка ошибки при запросе
 	if(mysql_query(con, query_string)){
-		printf("%s\n", mysql_error(con));
+//		printf("%s\n", mysql_error(con));
 	}
 
 
@@ -89,7 +87,6 @@ int add_to_db(DBDAT *db){
 
 	for(int i=0; i < db->tc_num; i++){
 		sprintf(tmp, "%s", db->col[i].name);
-//		printf("%s\n", tmp);
 		strncat(tmp1, tmp, strlen(tmp));
 		if(i < (db->tc_num - 1)){
 			strncat(tmp1, ", ", strlen(", "));
@@ -106,10 +103,9 @@ int add_to_db(DBDAT *db){
 	}
 
 	sprintf(buffer, insert_to_table, db->table, tmp1, tmp2);
-	printf("%s\n", buffer);
 
 	if(mysql_query(con, buffer)){
-		printf("%s\n", mysql_error(con));
+//		printf("%s\n", mysql_error(con));
 	}
 
 
