@@ -2,37 +2,58 @@
 #include <string.h>
 #include "rc.h"
 
-int main(int argc, char **argv){
+int rdbpar(char *file, db_t *param){
 	FILE *fd;
 	char buff[BUF_SZ];
-	char *token;
-	const char delim[2] = "=";
 	int param_count = 0;
+	char *indx;
 
-	fd = fopen("conf", "r");
+	fd = fopen(file, "r");
 	if(fd == NULL){
 		perror("RC_PROG_ERROR: ");
 	}
 
 
 	while(fgets(buff, BUF_SZ, fd)){
-		//Чистим строку от ненужных символов.
-		//Ищем разделитель.
-		if(strstr(buff, "db_addr")){
-			printf("Find db addr");
+		if(strstr(buff, "db_user")){
+			getarg(buff, param->db_user);
 		}
-		token = strpbrk(buff, delim);	
-		//Забираем название параметра
-		strncpy(params[param_count].param_name, buff,  token - buff);
-		//Забираем значение параметра.
-		strcpy(params[param_count].param_value, token + 1);
-		printf("%s\t%s", params[param_count].param_name, params[param_count].param_value);
-		param_count++;
 
+		if(strstr(buff, "db_passwd")){
+			getarg(buff, param->db_passwd);
+		}
+
+		if(strstr(buff, "db_addr")){
+			getarg(buff, param->db_addr);
+		}
+
+		if(strstr(buff, "db_name")){
+			getarg(buff, param->db_name);
+		}
+
+		if(strstr(buff, "db_table")){
+			getarg(buff, param->db_table);
+		}
+
+		param_count++;
 	}
-	printf("Params count: %d\n", param_count);
+
+#ifdef DEBUG
+	printf("%s\t%s\t%s\t%s\t%s\n", param->db_user, param->db_passwd, param->db_addr, param->db_name, param->db_table);
+#endif
 
 	fclose(fd);
 
-	return 0;
+	return param_count;
+}
+
+char *getarg(char *buff, char *arg){
+	char *token;
+	int ln;
+	const char delim[2] = "=";
+
+	token = strpbrk(buff, delim);
+	ln = strrchr(token, '"') - (strchr(token, '"') + 1);
+	strncpy(arg, strchr(token, '"') + 1, ln);
+	return arg;
 }
