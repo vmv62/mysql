@@ -16,18 +16,16 @@ int main(int argc, char **argv){
 
 
 	while(fgets(buff, BUF_SZ, fd)){
-		token = strtok(buff, delim);
-		while(token != NULL){
-//			printf("%s", token);
-			strcpy(params[param_count].param_name, token);
-			token = strtok(NULL, delim);
-//			strcpy(params[param_count].param_value, token);
-		}
-			printf("%s", params[param_count].param_name);
+		//Чистим строку от ненужных символов.
+		//Ищем разделитель.
+		token = strpbrk(buff, delim);	
+		//Забираем название параметра
+		strncpy(params[param_count].param_name, buff,  token - buff);
+		//Забираем значение параметра.
+		strcpy(params[param_count].param_value, token + 1);
+		printf("%s\t%s", params[param_count].param_name, params[param_count].param_value);
+		param_count++;
 
-//			strcpy(params[param_count].param_value, token);
-			param_count++;
-//			printf("%s\t\t%s\n", params[param_count].param_name, params[param_count].param_value);
 	}
 	printf("Params count: %d\n", param_count);
 
