@@ -18,6 +18,9 @@ int main(int argc, char **argv){
 	while(fgets(buff, BUF_SZ, fd)){
 		//Чистим строку от ненужных символов.
 		//Ищем разделитель.
+		if(strstr(buff, "db_addr")){
+			printf("Find db addr");
+		}
 		token = strpbrk(buff, delim);	
 		//Забираем название параметра
 		strncpy(params[param_count].param_name, buff,  token - buff);

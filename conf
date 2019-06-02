@@ -1,4 +1,5 @@
-db_name  = "vmv"
-db_addr = "196.67.204.166"
+db_user = "vmv"
 db_passwd = "23272829"
+db_name  = "home"
+db_addr = "196.67.204.166"
 db_table = "daily_counter"
