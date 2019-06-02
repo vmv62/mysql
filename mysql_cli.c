@@ -22,11 +22,14 @@ int main(int argc, char **argv){
 int add_to_db(db_t *db, char *query){
 	MYSQL *con = mysql_init(NULL);
 
+	printf("Start connect o server\n");
 	//Подключаемся к базе (сервер, пользователь, пароль)
 	if (mysql_real_connect(con, db->db_addr, db->db_user, db->db_passwd, NULL, 0, NULL, 0) == NULL) {
-//		perror("%s\n", mysql_error(con)); 
+		printf("%s\n", mysql_error(con));
 				return -1;
 	}
+
+	printf("Connect to server done\n");
 
 
 	//Работа с базой.
@@ -37,7 +40,6 @@ int add_to_db(db_t *db, char *query){
 			return -1;
 		}
 	}
-
 
 
 	//Отправка запроса на сервер

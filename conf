@@ -1,5 +1,5 @@
 db_user = "vmv"
 db_passwd = "23272829"
 db_name  = "home"
-db_addr = "196.67.204.166"
+db_addr = "194.67.204.166"
 db_table = "dayli_counter"
