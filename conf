@@ -1,0 +1,4 @@
+db_name  = "vmv"
+db_addr = "196.67.204.166"
+db_passwd = "23272829"
+db_table = "daily_counter"

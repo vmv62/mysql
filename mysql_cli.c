@@ -34,11 +34,8 @@ int add_to_db(DBDAT *db){
 				return -1;
 	}
 
-//	sprintf(buffer, create_db, db->name);
-//	printf("%s\n", buffer);
 
 	//Работа с базой.
-	
 	//Если база выбрана неудачно:
 	if(mysql_select_db(con, db->name)){
 //		puts("No database, i am create it now!\n");
@@ -48,57 +45,8 @@ int add_to_db(DBDAT *db){
 	}
 
 
-	//Работа с таблицей
-/*
-	char tmp[2000];
-	char tmp1[2000];
-	char tmp2[2000];
-*/
-	memset(buffer, 0, sizeof(buffer));
 
-	//Для создания таблицы формируем пару: название столбца, тип данных
-	for(int i=0; i < db->tc_num; i++){
-		sprintf(tmp, "%s %s", db->col[i].name, db->col[i].type);
-		strncat(buffer, tmp, strlen(tmp));
-		if(i < (db->tc_num - 1)){
-			strncat(buffer, ", ", strlen(", "));
-		}
-	}
-/*
-	char query_string[2000];
-	//Формируем строку запроса.
-	sprintf(query_string, create_table, db->table, buffer);
-	//Обработка ошибки при запросе
-	if(mysql_query(con, query_string)){
-//		printf("%s\n", mysql_error(con));
-	}
-*/
-
-	//Внесение данных в таблицу
-	memset(buffer, 0, sizeof(buffer));
-	memset(tmp, 0, sizeof(tmp));
-	memset(tmp1, 0, sizeof(tmp1));
-	memset(tmp2, 0, sizeof(tmp2));
-
-	for(int i=0; i < db->tc_num; i++){
-		sprintf(tmp, "%s", db->col[i].name);
-		strncat(tmp1, tmp, strlen(tmp));
-		if(i < (db->tc_num - 1)){
-			strncat(tmp1, ", ", strlen(", "));
-		}
-	}
-
-	memset(tmp, 0, sizeof(tmp));
-	for(int i=0; i < db->tc_num; i++){
-		sprintf(tmp, "%s", db->col[i].data);
-		strncat(tmp2, tmp, strlen(tmp));
-		if(i < (db->tc_num - 1)){
-			strncat(tmp2, ", ", strlen(", "));
-		}
-	}
-
-	sprintf(buffer, insert_to_table, db->table, tmp1, tmp2);
-
+	//Отправка запроса на сервер
 	if(mysql_query(con, buffer)){
 		printf("%s\n", mysql_error(con));
 	}
