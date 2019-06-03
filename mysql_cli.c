@@ -20,17 +20,16 @@ int main(int argc, char **argv){
 	//Получаем настройки для соединения с базой из файла
 	rdbpar("./conf", param);
 
-	if(dp->mode || SINCMODE){
+	if(dp->mode & SINCMODE){
 		//Формируем строку запроса для отправки на сервер
 		sprintf(hquery, insert_to_table, dp->col_name, dp->col_value);
-		printf("%s\n", hquery);
 		add_to_db(param, hquery);
 	}
-
+/*
 	if(dp->mode || PREQMODE){
 		add_to_db(param, dp->pre_query);
 	}
-
+*/
 	free(param);
 	return 0;
 }

@@ -15,12 +15,12 @@ cliparam_t *get_cli_param(int argc, char **argv){
 					if(argv[argcnt][0] == '-'){	//This is atribute of parametr.
 						switch(argv[argcnt][1]){
 							case 'c':	strcpy(clip->col_name, argv[argcnt + 1]);				//Задание имени колонки
-											clip->mode |= PREQMODE;
+											clip->mode |= SINCMODE;
 											break;
 							case 'v':	strcpy(clip->col_value, argv[argcnt + 1]); //Ручное задание адреса устройства.
 											break;
 							case 'q':	strcpy(clip->pre_query, argv[argcnt + 1]); //Ручное задание адреса устройства.
-											clip->mode |= SINCMODE;
+											clip->mode |= PREQMODE;
 											break;
 
 						}
