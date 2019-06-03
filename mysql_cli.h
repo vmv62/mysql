@@ -1,9 +1,10 @@
 #include "rc.h"
+#include "clip.h"
 
 static char *use_db = "USE %s";
 static char *create_table = "CREATE TABLE %s (Time TIMESTAMP, %s)";
 static char *create_db = "CREATE DATABASE %s";
-static char *insert_to_table = "INSERT INTO dayli_counter(day_cons) VALUE (25.67)";
+static char *insert_to_table = "INSERT INTO dayli_counter(%s) VALUE (%s)";
 
 
 //Определили новый тип struct colomn_param и присвоели ему псевдоним colomn

@@ -6,15 +6,31 @@
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
+	char hquery[200];
 
 	//Создаем указатель и выделяем память под настройки базы данных
 	db_t *param;
 	param = (db_t *)malloc(sizeof(db_t));
 
+	cliparam_t *dp;
+
+	//Получаем данные для отправки в базу из командной строки
+	dp = get_cli_param(argc, argv);
+
+	//Получаем настройки для соединения с базой из файла
 	rdbpar("./conf", param);
 
-	printf("%s\n", param->db_addr);
-	add_to_db(param, insert_to_table);
+	if(dp->mode || SINCMODE){
+		//Формируем строку запроса для отправки на сервер
+		sprintf(hquery, insert_to_table, dp->col_name, dp->col_value);
+		printf("%s\n", hquery);
+		add_to_db(param, hquery);
+	}
+
+	if(dp->mode || PREQMODE){
+		add_to_db(param, dp->pre_query);
+	}
+
 	free(param);
 	return 0;
 }
@@ -22,15 +38,19 @@ int main(int argc, char **argv){
 int add_to_db(db_t *db, char *query){
 	MYSQL *con = mysql_init(NULL);
 
+#ifdef DEBUG
 	printf("Start connect o server\n");
+#endif
+
 	//Подключаемся к базе (сервер, пользователь, пароль)
 	if (mysql_real_connect(con, db->db_addr, db->db_user, db->db_passwd, NULL, 0, NULL, 0) == NULL) {
 		printf("%s\n", mysql_error(con));
 				return -1;
 	}
 
+#ifdef DEBUG
 	printf("Connect to server done\n");
-
+#endif
 
 	//Работа с базой.
 	//Если база выбрана неудачно:
