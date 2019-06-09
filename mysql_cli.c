@@ -3,6 +3,7 @@
 #include <my_global.h>
 #include <mysql.h>
 #include "mysql_cli.h"
+#define DEBUG
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
@@ -19,6 +20,12 @@ int main(int argc, char **argv){
 
 	//Получаем настройки для соединения с базой из файла
 	rdbpar("./conf", param);
+
+#ifdef DEBUG
+	printf("%s\n", param->table.name);
+	printf("%s\t%s\t%s\n", param->table.params[0], param->table.params[1], param->table.params[2]);
+	printf("%d\t%d\t%d\t\n", param->prg_tmint, param->prg_connspd, param->prg_pollint);
+#endif
 
 	if(dp->mode & SINCMODE){
 		//Формируем строку запроса для отправки на сервер
@@ -53,7 +60,7 @@ int add_to_db(db_t *db, char *query){
 
 	//Работа с базой.
 	//Если база выбрана неудачно:
-	if(mysql_select_db(con, db->db_name)){
+	if(mysql_select_db(con, db->table.name)){
 //		puts("No database, i am create it now!\n");
 		if(mysql_query(con, query)){
 			return -1;

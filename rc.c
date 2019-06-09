@@ -33,10 +33,27 @@ int rdbpar(char *file, db_t *param){
 		}
 
 		if(strstr(buff, "tb_name")){
-			getarg(buff, param->table.tb_name);
+			getarg(buff, param->table.name);
 		}
 
-		param_count++;
+		if(strstr(buff, "tb_pname")){
+			param->table.params[param_count] = (char *)malloc(PNSIZE);
+			getarg(buff, param->table.params[param_count]);
+			param_count++;
+		}
+
+		if(strstr(buff, "prg_tmint")){
+			param->prg_tmint = getintarg(buff);
+		}
+
+		if(strstr(buff, "prg_connspd")){
+			param->prg_connspd = getintarg(buff);
+		}
+
+		if(strstr(buff, "prg_pollint")){
+			param->prg_pollint = getintarg(buff);
+		}
+
 	}
 
 #ifdef DEBUG
@@ -57,4 +74,14 @@ char *getarg(char *buff, char *arg){
 	ln = strrchr(token, '"') - (strchr(token, '"') + 1);
 	strncpy(arg, strchr(token, '"') + 1, ln);
 	return arg;
+}
+
+int getintarg(char *buff){
+	char *token;
+	int ln;
+	const char delim[2] = "=";
+
+	token = strpbrk(buff, delim);
+	ln = atoi(token + 1);
+	return ln;
 }

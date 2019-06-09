@@ -2,4 +2,13 @@ db_user = "vmv"
 db_passwd = "23272829"
 db_name  = "home"
 db_addr = "194.67.204.166"
-db_table = "dayli_counter"
+
+prg_tmint = 10	
+prg_prot = "modbus_rtu"
+prg_connspd = 9600
+prg_pollint = 2
+
+tb_name = "dayli_counter"
+tb_pname = "day_cons"
+tb_pname = "day_maxcons"
+tb_pname = "day_mincons"
