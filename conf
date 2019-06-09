@@ -3,7 +3,7 @@ db_passwd = "23272829"
 db_name  = "home"
 db_addr = "194.67.204.166"
 
-prg_tmint = 10	
+prg_tmint = 60	
 prg_prot = "modbus_rtu"
 prg_connspd = 9600
 prg_pollint = 2

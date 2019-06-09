@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <my_global.h>
 #include <mysql.h>
 #include "mysql_cli.h"
-#define DEBUG
+//#define DEBUG
 
 int main(int argc, char **argv){
 	float mmm[4] = {23.3, 56, 78.4};
 	char hquery[200];
+	int prm_cnt;
 
 	//Создаем указатель и выделяем память под настройки базы данных
 	db_t *param;
@@ -19,7 +21,14 @@ int main(int argc, char **argv){
 	dp = get_cli_param(argc, argv);
 
 	//Получаем настройки для соединения с базой из файла
-	rdbpar("./conf", param);
+	prm_cnt = rdbpar("./conf", param);
+ 	for(int i = 0; i < prm_cnt; i++){
+		param->table.parval[i] = (char *)malloc(10);
+	}
+
+//	sprintf(param->table.parval[0], "%s", "124");
+//	sprintf(param->table.parval[1], "%s", "15");
+//	sprintf(param->table.parval[2], "%s", "45");
 
 #ifdef DEBUG
 	printf("%s\n", param->table.name);
@@ -27,10 +36,21 @@ int main(int argc, char **argv){
 	printf("%d\t%d\t%d\t\n", param->prg_tmint, param->prg_connspd, param->prg_pollint);
 #endif
 
-	if(dp->mode & SINCMODE){
-		//Формируем строку запроса для отправки на сервер
-		sprintf(hquery, insert_to_table, dp->col_name, dp->col_value);
-		add_to_db(param, hquery);
+	while(1){
+	sprintf(param->table.parval[0], "%d", rand() % 100);
+	sprintf(param->table.parval[1], "%d", rand() % 100);
+	sprintf(param->table.parval[2], "%d", rand() % 100);
+
+//		if(dp->mode & SINCMODE){
+			//Формируем строку запроса для отправки на сервер
+			sprintf(hquery, insert_to_table, param->table.name, param->table.params[0], param->table.params[1], param->table.params[2], param->table.parval[0], param->table.parval[1], param->table.parval[2]);
+			add_to_db(param, hquery);
+#ifdef DEBUG
+	printf("Added to db.\n");
+	printf("%s\n", hquery);
+#endif
+//		}
+		sleep(param->prg_tmint);
 	}
 /*
 	if(dp->mode || PREQMODE){
@@ -60,9 +80,10 @@ int add_to_db(db_t *db, char *query){
 
 	//Работа с базой.
 	//Если база выбрана неудачно:
-	if(mysql_select_db(con, db->table.name)){
+	if(mysql_select_db(con, db->db_name)){
 //		puts("No database, i am create it now!\n");
 		if(mysql_query(con, query)){
+			printf("%s\n", mysql_error(con));
 			return -1;
 		}
 	}
