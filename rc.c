@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "rc.h"
 
 int rdbpar(char *file, db_t *param){
@@ -31,8 +32,8 @@ int rdbpar(char *file, db_t *param){
 			getarg(buff, param->db_name);
 		}
 
-		if(strstr(buff, "db_table")){
-			getarg(buff, param->db_table);
+		if(strstr(buff, "tb_name")){
+			getarg(buff, param->table.tb_name);
 		}
 
 		param_count++;
